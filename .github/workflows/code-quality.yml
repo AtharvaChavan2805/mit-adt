@@ -32,7 +32,7 @@ jobs:
       run: echo "Code quality scan placeholder"
 
     - name: Check for secrets
-      uses: gitleaks/gitleaks-action@v3
+      uses: gitleaks/gitleaks-action@v2
       continue-on-error: true
 
   dependency-check:
