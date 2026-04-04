@@ -32,7 +32,7 @@ jobs:
       run: echo "Code quality scan placeholder"
 
     - name: Check for secrets
-      uses: gitleaks/gitleaks-action@v2
+      uses: gitleaks/gitleaks-action@v3
       continue-on-error: true
 
   dependency-check:
@@ -44,13 +44,11 @@ jobs:
 
     - name: Run npm audit
       working-directory: ./server
-      run: npm audit --audit-level=moderate
-      continue-on-error: true
+      run: npm audit --audit-level=moderate || true
 
     - name: Run npm audit
       working-directory: ./client
-      run: npm audit --audit-level=moderate
-      continue-on-error: true
+      run: npm audit --audit-level=moderate || true
 
     - name: Check for CVE vulnerabilities
       uses: aquasecurity/trivy-action@master
@@ -62,7 +60,7 @@ jobs:
       continue-on-error: true
 
     - name: Upload to GitHub Security
-      uses: github/codeql-action/upload-sarif@v3
+      uses: github/codeql-action/upload-sarif@v4
       with:
         sarif_file: 'trivy-results.sarif'
       if: always()
