@@ -1,0 +1,64 @@
+name: Code Quality & Security
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  code-quality:
+    runs-on: ubuntu-latest
+    name: Code Quality Checks
+    
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: Run SonarQube scan (Optional)
+      # Uncomment to enable SonarQube integration
+      # uses: SonarSource/sonarcloud-github-action@master
+      # env:
+      #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      run: echo "Code quality scan placeholder"
+
+    - name: Check for secrets
+      uses: gitleaks/gitleaks-action@v2
+      continue-on-error: true
+
+  dependency-check:
+    runs-on: ubuntu-latest
+    name: Dependency Security Check
+    
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Run npm audit
+      working-directory: ./server
+      run: npm audit --audit-level=moderate
+      continue-on-error: true
+
+    - name: Run npm audit
+      working-directory: ./client
+      run: npm audit --audit-level=moderate
+      continue-on-error: true
+
+    - name: Check for CVE vulnerabilities
+      uses: aquasecurity/trivy-action@master
+      with:
+        scan-type: 'fs'
+        scan-ref: '.'
+        format: 'sarif'
+        output: 'trivy-results.sarif'
+      continue-on-error: true
+
+    - name: Upload to GitHub Security
+      uses: github/codeql-action/upload-sarif@v2
+      with:
+        sarif_file: 'trivy-results.sarif'
+      if: always()

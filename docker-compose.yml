@@ -1,20 +1,41 @@
+version: "3.9"
+
 services:
   server:
     build:
       context: ./server
+    image: atharvachavan2805/mit-adt-server:latest
     container_name: college_server
     ports:
       - "4000:4000"
     env_file:
       - ./server/.env
     restart: unless-stopped
+    depends_on:
+      - mongo
+    volumes:
+      - ./server:/app
+      - server_node_modules:/app/node_modules
 
   client:
     build:
       context: ./client
+    image: atharvachavan2805/mit-adt-client:latest
     container_name: college_client
     ports:
       - "3000:80"
     depends_on:
       - server
     restart: unless-stopped
+
+  mongo:
+    image: mongo
+    container_name: college_mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
+  server_node_modules:

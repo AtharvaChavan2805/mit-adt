@@ -1,0 +1,12 @@
+# Default owners for all files
+* @atharvachavan2805
+
+# Server owners
+/server/ @atharvachavan2805
+
+# Client owners
+/client/ @atharvachavan2805
+
+# CI/CD configuration
+/.github/ @atharvachavan2805
+/docker-compose.yml @atharvachavan2805
