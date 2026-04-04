@@ -5,10 +5,13 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { toast } from "react-toastify";
 const EmailVerify = () => {
- axios.defaults.withCredentials = true; 
   const {backendUrl, isLoggedin, userData, getUserData} = useContext(AppContent)
   
   const navigate = useNavigate()
+
+useEffect(() => {
+  axios.defaults.withCredentials = true;
+}, [])
 
 const inputRefs = React.useRef([])
 
@@ -56,7 +59,7 @@ const onSubmitHandler = async (e) => {
 
 useEffect(() =>{
  isLoggedin && userData && userData.isAccountVerified && navigate('/')
-},[isLoggedin, userData])
+},[isLoggedin, userData, navigate])
 
   return (
     <div className=' flex items-center justify-center min-h-screen  bg-gradient-to-br from-blue-200 to-purple-400'>

@@ -1,4 +1,4 @@
-import React, { useState ,useContext } from 'react'
+import React, { useState ,useContext, useEffect } from 'react'
 import { assets } from '../assets/assets'
 import { useNavigate } from 'react-router-dom'
 import { AppContent } from '../context/AppContext'
@@ -7,7 +7,10 @@ import { toast } from 'react-toastify'
 const ResetPasswor = () => {
 
 const {backendUrl} = useContext(AppContent)
-axios.defaults.withCredentials = true
+
+useEffect(() => {
+  axios.defaults.withCredentials = true
+}, [])
 
 const navigate = useNavigate()
 const [email, setEmail] = useState('')
