@@ -1,5 +1,9 @@
 name: Code Quality & Security
 
+permissions:
+  contents: read
+  security-events: write
+
 on:
   push:
     branches: [ master, main, develop ]
@@ -12,10 +16,10 @@ jobs:
     name: Code Quality Checks
     
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
 
     - name: Setup Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v5
       with:
         node-version: '20'
 
@@ -36,7 +40,7 @@ jobs:
     name: Dependency Security Check
     
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
 
     - name: Run npm audit
       working-directory: ./server
@@ -58,7 +62,7 @@ jobs:
       continue-on-error: true
 
     - name: Upload to GitHub Security
-      uses: github/codeql-action/upload-sarif@v2
+      uses: github/codeql-action/upload-sarif@v3
       with:
         sarif_file: 'trivy-results.sarif'
       if: always()
