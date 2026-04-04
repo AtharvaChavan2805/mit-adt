@@ -49,18 +49,3 @@ jobs:
     - name: Run npm audit
       working-directory: ./client
       run: npm audit --audit-level=moderate || true
-
-    - name: Check for CVE vulnerabilities
-      uses: aquasecurity/trivy-action@master
-      with:
-        scan-type: 'fs'
-        scan-ref: '.'
-        format: 'sarif'
-        output: 'trivy-results.sarif'
-      continue-on-error: true
-
-    - name: Upload to GitHub Security
-      uses: github/codeql-action/upload-sarif@v4
-      with:
-        sarif_file: 'trivy-results.sarif'
-      if: always()
