@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { AppContent } from '../context/AppContext'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-const ResetPasswor = () => {
+const ResetPassword = () => {
 
 const {backendUrl} = useContext(AppContent)
 
@@ -149,4 +149,4 @@ const handlePaste = (e) => {
   )
 }
 
-export default ResetPasswor
+export default ResetPassword
