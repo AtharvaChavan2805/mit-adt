@@ -32,7 +32,6 @@ jobs:
       uses: actions/checkout@v5
 
     - name: Deploy to production server
-      if: ${{ secrets.DEPLOY_HOST != '' && secrets.DEPLOY_USER != '' }}
       env:
         DEPLOY_KEY: ${{ secrets.DEPLOY_PRIVATE_KEY }}
         DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
