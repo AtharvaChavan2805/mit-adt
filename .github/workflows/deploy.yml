@@ -6,23 +6,30 @@ on:
     tags: [ 'v*' ]
 
 jobs:
-  deploy:
+  check-secrets:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v'))
-
+    outputs:
+      has-secrets: ${{ steps.check.outputs.has-secrets }}
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v5
-
-    - name: Check if deployment secrets are configured
+    - id: check
       run: |
         if [ -z "$DEPLOY_HOST" ] || [ -z "$DEPLOY_USER" ]; then
-          echo "⚠️  Deployment skipped: Missing DEPLOY_HOST or DEPLOY_USER secrets"
-          exit 0
+          echo "has-secrets=false" >> $GITHUB_OUTPUT
+        else
+          echo "has-secrets=true" >> $GITHUB_OUTPUT
         fi
       env:
         DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
         DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+
+  deploy:
+    needs: check-secrets
+    runs-on: ubuntu-latest
+    if: needs.check-secrets.outputs.has-secrets == 'true'
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v5
 
     - name: Deploy to production server
       if: ${{ secrets.DEPLOY_HOST != '' && secrets.DEPLOY_USER != '' }}
