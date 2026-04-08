@@ -23,14 +23,6 @@ jobs:
       with:
         node-version: '20'
 
-    - name: Run SonarQube scan (Optional)
-      # Uncomment to enable SonarQube integration
-      # uses: SonarSource/sonarcloud-github-action@master
-      # env:
-      #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      run: echo "Code quality scan placeholder"
-
     - name: Check for secrets
       uses: gitleaks/gitleaks-action@v2
       continue-on-error: true
@@ -42,10 +34,15 @@ jobs:
     steps:
     - uses: actions/checkout@v5
 
-    - name: Run npm audit
+    - name: Setup Node.js
+      uses: actions/setup-node@v5
+      with:
+        node-version: '20'
+
+    - name: Run npm audit in server
       working-directory: ./server
       run: npm audit --audit-level=moderate || true
 
-    - name: Run npm audit
+    - name: Run npm audit in client
       working-directory: ./client
       run: npm audit --audit-level=moderate || true
