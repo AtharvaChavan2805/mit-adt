@@ -1,5 +1,5 @@
 # Stage 1: Dependencies
-FROM node:20-alpine AS dependencies
+FROM node:25-alpine AS dependencies
 
 WORKDIR /app
 
@@ -10,7 +10,7 @@ COPY package*.json ./
 RUN npm install --production=false
 
 # Stage 2: Production
-FROM node:20-alpine
+FROM node:25-alpine
 
 # Create non-root user for security
 RUN addgroup -g 1001 -S nodejs && adduser -S nodejs -u 1001
